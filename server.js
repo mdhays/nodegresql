@@ -19,6 +19,15 @@ app.get('/genres', (req, res) => {
     .then(genres => res.send(genres));
 });
 
+app.get('/genres/:id' , (req, res) => {
+  models.Genre.findOne({
+    where: {
+      GenreId: req.params.id
+    }
+  })
+    .then(genres => res.send(genres));
+});
+
 app.get('/mediatypes', (req, res) => {
   models.MediaType.findAll()
     .then(types => res.send(types));
@@ -59,6 +68,25 @@ app.get('/invoices', (req, res) => {
     .then(invoices => res.send(invoices));
 });
 
+app.get('/invoices/:id', (req, res) => {
+  models.Invoice.findOne({
+      where: {
+        InvoiceId: req.params.id
+      }
+    })
+    .then(invoice => res.send(invoice));
+});
+
+app.get('/invoices/:id/customer', (req, res) => {
+  models.Invoice.findOne({
+      where: {
+        InvoiceId: req.params.id
+      }
+    })
+    .then(invoice => invoice.getCustomer())
+    .then(customer => res.send(customer));
+});
+
 app.get('/customers', (req, res) => {
   models.Customer.findAll()
     .then(customers => res.send(customers));
@@ -77,9 +105,14 @@ app.get('/customers/:id/invoices', (req, res) => {
     where: {
       CustomerId: req.params.id
     },
-    include: models.Invoice
   })
+  .then(customer => customer.getInvoices())
   .then(invoices => res.send(invoices));
+});
+
+app.get('/employees', (req, res) => {
+  models.Employee.findAll()
+  .then(employee => res.send(employee));
 });
 
 app.listen(PORT, () => {
