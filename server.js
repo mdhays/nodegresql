@@ -24,18 +24,26 @@ app.get('/mediatypes', (req, res) => {
     .then(types => res.send(types));
 });
 
-app.get('/artist', (req, res) => {
+app.get('/artists', (req, res) => {
   models.Artist.findAll()
-  .then(types => res.send(types));
+    .then(artists => res.send(artists));
 });
 
-app.get('/playlist', (req, res) => {
+app.get('/playlists', (req, res) => {
   models.Playlist.findAll()
-  .then(types => res.send(types));
+    .then(playlists => res.send(playlists));
 });
 
-// Artist
-//Playlist
+app.get('/albums', (req, res) => {
+  models.Album.findAll({
+      attributes: ['AlbumId', 'Title'],
+      include: {
+        model: models.Artist,
+        attributes: ['Name']
+      }
+    })
+    .then(albums => res.send(albums));
+});
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
