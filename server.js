@@ -115,6 +115,15 @@ app.get('/employees', (req, res) => {
   .then(employee => res.send(employee));
 });
 
+app.get('/employees/:id', (req, res) => {
+  models.Employee.findOne({
+    where: {
+      EmployeeId: req.params.id
+    },
+  })
+  .then(employee => res.send(employee));
+});
+
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });
